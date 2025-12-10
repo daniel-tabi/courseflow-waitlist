@@ -4,6 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { ArrowRight, Check, Loader2 } from "lucide-react";
+import { z } from "zod";
+
+const emailSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .min(1, { message: "Email is required" })
+    .max(255, { message: "Email must be less than 255 characters" })
+    .email({ message: "Please enter a valid email address" }),
+});
 
 export function WaitlistForm() {
   const [email, setEmail] = useState("");
@@ -13,10 +23,13 @@ export function WaitlistForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email) {
+    const result = emailSchema.safeParse({ email });
+    
+    if (!result.success) {
+      const errorMessage = result.error.errors[0]?.message || "Invalid email";
       toast({
-        title: "Email required",
-        description: "Please enter your email address.",
+        title: "Invalid email",
+        description: errorMessage,
         variant: "destructive",
       });
       return;
