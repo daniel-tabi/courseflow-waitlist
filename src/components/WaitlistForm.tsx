@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { ArrowRight, Check, Loader2 } from "lucide-react";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 
 const emailSchema = z.object({
   email: z
@@ -37,16 +38,30 @@ export function WaitlistForm() {
 
     setIsLoading(true);
     
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    setIsLoading(false);
-    setIsSuccess(true);
-    
-    toast({
-      title: "You're on the list! 🎉",
-      description: "We'll notify you when CourseFlow launches.",
-    });
+    try {
+      const { data, error } = await supabase.functions.invoke("mailchimp-subscribe", {
+        body: { email: result.data.email },
+      });
+
+      if (error) {
+        throw new Error(error.message || "Failed to subscribe");
+      }
+
+      setIsSuccess(true);
+      toast({
+        title: "You're on the list! 🎉",
+        description: "We'll notify you when CourseFlow launches.",
+      });
+    } catch (error) {
+      console.error("Subscription error:", error);
+      toast({
+        title: "Something went wrong",
+        description: error instanceof Error ? error.message : "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (isSuccess) {
