@@ -1,44 +1,6 @@
 import { motion } from "framer-motion";
 import { Clock, Star, MessageSquare, Mail } from "lucide-react";
 
-const benefits = [
-  {
-    icon: Clock,
-    label: "3-day",
-    title: "Early Access",
-    description: "Get exclusive 3-day early access before the public launch.",
-    variant: "primary" as const,
-  },
-  {
-    icon: Star,
-    label: "Lifetime",
-    title: "Full Access",
-    description: "Lifetime access to the tool with all features included.",
-    variant: "secondary" as const,
-  },
-  {
-    icon: MessageSquare,
-    label: "Bonus",
-    title: "Feedback Credits",
-    description: "Additional credits when you share feedback to help us improve.",
-    variant: "accent" as const,
-  },
-  {
-    icon: Mail,
-    label: "Exclusive",
-    title: "Behind the Scenes",
-    description: "Get demos, tips, and behind-the-scenes updates via email as we build.",
-    variant: "muted" as const,
-  },
-];
-
-const variantStyles = {
-  primary: "bg-primary/10 border-primary/20",
-  secondary: "bg-coral/10 border-coral/20",
-  accent: "bg-cream-dark border-border",
-  muted: "bg-background border-border",
-};
-
 export const WaitlistBenefits = () => {
   return (
     <section className="py-16 sm:py-24 border-t border-border">
@@ -58,36 +20,85 @@ export const WaitlistBenefits = () => {
           </p>
         </motion.div>
 
-        <div className="mx-auto max-w-4xl grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {benefits.map((benefit, index) => (
-            <motion.div
-              key={benefit.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className={`relative rounded-2xl border p-6 ${variantStyles[benefit.variant]} transition-all duration-300 hover:shadow-soft`}
-            >
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                  <benefit.icon className="h-6 w-6 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-primary">
-                      {benefit.label}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-1">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {benefit.description}
-                  </p>
-                </div>
+        {/* Bento Grid */}
+        <div className="mx-auto max-w-5xl grid grid-cols-2 sm:grid-cols-4 gap-4 auto-rows-[120px] sm:auto-rows-[140px]">
+          
+          {/* 3-day Early Access - Large card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0 }}
+            viewport={{ once: true }}
+            className="col-span-2 row-span-2 rounded-3xl bg-primary/10 border border-primary/20 p-6 sm:p-8 flex flex-col justify-between"
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/20">
+                <Clock className="h-6 w-6 text-primary" />
               </div>
-            </motion.div>
-          ))}
+            </div>
+            <div>
+              <span className="text-5xl sm:text-6xl font-bold text-primary">3-day</span>
+              <h3 className="text-xl sm:text-2xl font-bold text-foreground mt-2">Early Access</h3>
+              <p className="text-sm text-muted-foreground mt-2">
+                Get exclusive early access before the public launch.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Lifetime Access - Stat card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            viewport={{ once: true }}
+            className="col-span-1 row-span-1 rounded-3xl bg-coral/10 border border-coral/20 p-4 sm:p-5 flex flex-col justify-between"
+          >
+            <Star className="h-5 w-5 text-coral" />
+            <div>
+              <span className="text-2xl sm:text-3xl font-bold text-foreground">Lifetime</span>
+              <p className="text-xs text-muted-foreground mt-1">Full access to the tool</p>
+            </div>
+          </motion.div>
+
+          {/* Bonus Credits */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="col-span-1 row-span-2 rounded-3xl bg-cream-dark border border-border p-4 sm:p-5 flex flex-col justify-between"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                <MessageSquare className="h-5 w-5 text-primary" />
+              </div>
+              <span className="text-xs font-semibold uppercase tracking-wider text-primary bg-primary/10 px-2 py-1 rounded-full">
+                Bonus
+              </span>
+            </div>
+            <div>
+              <h3 className="text-lg sm:text-xl font-bold text-foreground">Feedback Credits</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-2 leading-relaxed">
+                Additional credits when you share feedback to help us improve.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Behind the Scenes - Wide card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            viewport={{ once: true }}
+            className="col-span-1 row-span-1 rounded-3xl bg-background border border-border p-4 sm:p-5 flex flex-col justify-between"
+          >
+            <Mail className="h-5 w-5 text-primary" />
+            <div>
+              <h3 className="text-sm sm:text-base font-bold text-foreground">Behind the Scenes</h3>
+              <p className="text-xs text-muted-foreground mt-1">Demos, tips & updates via email</p>
+            </div>
+          </motion.div>
+
         </div>
       </div>
     </section>
