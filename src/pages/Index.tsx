@@ -9,22 +9,26 @@ const features = [
   {
     icon: Sparkles,
     title: "Title Generator",
-    description: "Generate catchy, professional course titles. Get multiple variations tailored to your niche and audience.",
+    description:
+      "Generate catchy, professional course titles. Get multiple variations tailored to your niche and audience.",
   },
   {
     icon: FileText,
     title: "Outline Generator",
-    description: "Turn your core ideas into structured course outlines. Set your preferred length and let AI organize it.",
+    description:
+      "Turn your core ideas into structured course outlines. Set your preferred length and let AI organize it.",
   },
   {
     icon: Pen,
     title: "Script Generator",
-    description: "Auto-generate full lesson scripts based on your outline. Choose your tone—friendly, expert, or casual.",
+    description:
+      "Auto-generate full lesson scripts based on your outline. Choose your tone—friendly, expert, or casual.",
   },
   {
     icon: Presentation,
     title: "Slide Generator",
-    description: "Transform scripts into clean, ready-to-use slides. Choose from modern templates that match your style.",
+    description:
+      "Transform scripts into clean, ready-to-use slides. Choose from modern templates that match your style.",
   },
 ];
 
@@ -44,7 +48,6 @@ const Index = () => {
 
         <div className="container relative mx-auto px-4 py-12 sm:py-20 lg:py-24">
           <div className="mx-auto max-w-3xl text-center">
-
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -75,8 +78,7 @@ const Index = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl"
             >
-              Stop spending weeks on planning. Generate titles, outlines, scripts, 
-              and slides in minutes—not months.
+              Stop spending weeks on planning. Generate titles, outlines, scripts, and slides in minutes—not months.
             </motion.p>
 
             {/* Waitlist Form */}
@@ -112,21 +114,13 @@ const Index = () => {
             viewport={{ once: true }}
             className="mb-12 text-center"
           >
-            <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
-              Everything You Need to Create
-            </h2>
-            <p className="mt-3 text-muted-foreground">
-              From idea to complete course—powered by AI
-            </p>
+            <h2 className="text-2xl font-bold text-foreground sm:text-3xl">Everything You Need to Create</h2>
+            <p className="mt-3 text-muted-foreground">From idea to complete course—powered by AI</p>
           </motion.div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {features.map((feature, index) => (
-              <FeatureCard
-                key={feature.title}
-                {...feature}
-                delay={index * 0.1}
-              />
+              <FeatureCard key={feature.title} {...feature} delay={index * 0.1} />
             ))}
           </div>
         </div>
@@ -145,13 +139,10 @@ const Index = () => {
             viewport={{ once: true }}
             className="mx-auto max-w-2xl text-center"
           >
-            <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
-              Why CourseFlow?
-            </h2>
+            <h2 className="text-2xl font-bold text-foreground sm:text-3xl">Why CourseFlow?</h2>
             <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-              Most people never finish creating their course because the planning 
-              stage is overwhelming. CourseFlow eliminates that friction by turning 
-              a rough idea into a full course structure in minutes.
+              Most people never finish creating their course because the planning stage is overwhelming. CourseFlow
+              eliminates that friction by turning a rough idea into a full course structure in minutes.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4 text-sm">
               <span className="rounded-full bg-secondary px-4 py-2 font-medium text-secondary-foreground">
@@ -171,9 +162,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t border-border py-8">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-sm text-muted-foreground">
-            © 2024 CourseFlow. All rights reserved.
-          </p>
+          <p className="text-sm text-muted-foreground">© 2025 CourseFlow. All rights reserved.</p>
         </div>
       </footer>
     </div>
