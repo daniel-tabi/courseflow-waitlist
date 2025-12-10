@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { FeatureCard } from "@/components/FeatureCard";
 import { Navbar } from "@/components/Navbar";
+import { WaitlistBenefits } from "@/components/WaitlistBenefits";
 import { Sparkles, FileText, Pen, Presentation } from "lucide-react";
 
 const features = [
@@ -130,6 +131,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Waitlist Benefits Section */}
+      <WaitlistBenefits />
 
       {/* How It Works */}
       <section id="how-it-works" className="py-16 sm:py-24">
