@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { FeatureCard } from "@/components/FeatureCard";
+import { Navbar } from "@/components/Navbar";
 import { Sparkles, FileText, Pen, Presentation } from "lucide-react";
-import courseflowLogo from "@/assets/courseflow-logo.png";
 
 const features = [
   {
@@ -30,6 +30,9 @@ const features = [
 const Index = () => {
   return (
     <div className="min-h-screen bg-hero">
+      {/* Navbar */}
+      <Navbar />
+
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         {/* Background decoration */}
@@ -38,21 +41,8 @@ const Index = () => {
           <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
         </div>
 
-        <div className="container relative mx-auto px-4 py-16 sm:py-24 lg:py-32">
+        <div className="container relative mx-auto px-4 py-12 sm:py-20 lg:py-24">
           <div className="mx-auto max-w-3xl text-center">
-            {/* Logo */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-8 flex justify-center"
-            >
-              <img
-                src={courseflowLogo}
-                alt="CourseFlow"
-                className="h-20 w-auto sm:h-24"
-              />
-            </motion.div>
 
             {/* Badge */}
             <motion.div
@@ -112,7 +102,7 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section className="border-t border-border bg-cream-dark/50 py-16 sm:py-24">
+      <section id="features" className="border-t border-border bg-cream-dark/50 py-16 sm:py-24">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -142,7 +132,7 @@ const Index = () => {
       </section>
 
       {/* How It Works */}
-      <section className="py-16 sm:py-24">
+      <section id="how-it-works" className="py-16 sm:py-24">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
