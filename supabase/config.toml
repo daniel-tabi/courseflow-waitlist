@@ -1,1 +1,4 @@
 project_id = "kemgexlbyhfrdcjudnop"
+
+[functions.kit-subscribe]
+verify_jwt = false
