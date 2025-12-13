@@ -1,4 +1,1 @@
 project_id = "kemgexlbyhfrdcjudnop"
-
-[functions.mailchimp-subscribe]
-verify_jwt = false
