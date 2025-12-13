@@ -15,6 +15,28 @@ const emailSchema = z.object({
     .email({ message: "Please enter a valid email address" }),
 });
 
+// Simple in-memory rate limiting (resets on cold start)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 5;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(ip);
+  
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+  
+  if (record.count >= MAX_REQUESTS_PER_WINDOW) {
+    return true;
+  }
+  
+  record.count++;
+  return false;
+}
+
 serve(async (req: Request): Promise<Response> => {
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
@@ -22,14 +44,27 @@ serve(async (req: Request): Promise<Response> => {
   }
 
   try {
+    // Rate limiting based on IP
+    const clientIP = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || 
+                     req.headers.get("cf-connecting-ip") || 
+                     "unknown";
+    
+    if (isRateLimited(clientIP)) {
+      console.warn(`Rate limit exceeded for IP: ${clientIP}`);
+      return new Response(
+        JSON.stringify({ error: "Too many requests. Please try again later." }),
+        { status: 429, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
     const body = await req.json();
     
     // Validate input server-side
     const result = emailSchema.safeParse(body);
     if (!result.success) {
-      console.error("Validation error:", result.error.errors);
+      console.warn("Email validation failed");
       return new Response(
-        JSON.stringify({ error: result.error.errors[0]?.message || "Invalid email" }),
+        JSON.stringify({ error: "Please enter a valid email address." }),
         { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
@@ -39,16 +74,15 @@ serve(async (req: Request): Promise<Response> => {
     const apiKey = Deno.env.get("KIT_API_KEY");
 
     if (!apiKey) {
-      console.error("Missing Kit API key");
+      console.error("Missing API configuration");
       return new Response(
-        JSON.stringify({ error: "Server configuration error" }),
+        JSON.stringify({ error: "Service temporarily unavailable. Please try again later." }),
         { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
-    console.log(`Subscribing ${email} to Kit`);
+    console.log(`Processing subscription request`);
 
-    // Kit API v4 - Subscribe to a form or add subscriber
     const response = await fetch("https://api.kit.com/v4/subscribers", {
       method: "POST",
       headers: {
@@ -63,32 +97,32 @@ serve(async (req: Request): Promise<Response> => {
     const data = await response.json();
 
     if (!response.ok) {
-      // Handle already subscribed as success
-      if (response.status === 422 || data.errors?.email_address?.includes("already")) {
-        console.log(`${email} is already subscribed`);
+      // Handle already subscribed as success (don't reveal this to prevent enumeration)
+      if (response.status === 422) {
+        console.log("Subscription processed (may already exist)");
         return new Response(
-          JSON.stringify({ success: true, message: "Already subscribed" }),
+          JSON.stringify({ success: true }),
           { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
         );
       }
       
-      console.error("Kit error:", data);
+      console.error("Subscription service error:", response.status);
       return new Response(
-        JSON.stringify({ error: data.message || data.errors || "Failed to subscribe" }),
-        { status: response.status, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        JSON.stringify({ error: "Unable to process subscription. Please try again later." }),
+        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
-    console.log(`Successfully subscribed ${email} to Kit`);
+    console.log("Subscription successful");
     return new Response(
       JSON.stringify({ success: true }),
       { status: 200, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
 
   } catch (error) {
-    console.error("Error in kit-subscribe:", error);
+    console.error("Subscription processing error");
     return new Response(
-      JSON.stringify({ error: "An unexpected error occurred" }),
+      JSON.stringify({ error: "An unexpected error occurred. Please try again later." }),
       { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
   }
