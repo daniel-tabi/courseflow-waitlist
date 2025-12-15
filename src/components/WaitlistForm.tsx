@@ -39,16 +39,8 @@ export function WaitlistForm() {
     setIsLoading(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke("kit-subscribe", {
-        body: { email: result.data.email },
-      });
-
-      if (error) {
-        throw new Error(error.message || "Failed to subscribe");
-      }
-
       // Send welcome email via Resend
-      await supabase.functions.invoke("send-email", {
+      const { error } = await supabase.functions.invoke("send-email", {
         body: {
           to: result.data.email,
           subject: "Welcome to the CourseFlow Waitlist! 🎉",
@@ -78,6 +70,10 @@ export function WaitlistForm() {
           `,
         },
       });
+
+      if (error) {
+        throw new Error(error.message || "Failed to send welcome email");
+      }
 
       setIsSuccess(true);
       toast({
