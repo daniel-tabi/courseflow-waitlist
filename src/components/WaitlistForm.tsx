@@ -47,10 +47,42 @@ export function WaitlistForm() {
         throw new Error(error.message || "Failed to subscribe");
       }
 
+      // Send welcome email via Resend
+      await supabase.functions.invoke("send-email", {
+        body: {
+          to: result.data.email,
+          subject: "Welcome to the CourseFlow Waitlist! 🎉",
+          html: `
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+              <h1 style="color: #1a1a1a; font-size: 28px; margin-bottom: 20px;">Welcome to CourseFlow!</h1>
+              <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6;">
+                You're officially on the waitlist! We're thrilled to have you join us on this journey.
+              </p>
+              <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6;">
+                As an early supporter, you'll get:
+              </p>
+              <ul style="color: #4a4a4a; font-size: 16px; line-height: 1.8;">
+                <li>🚀 3-day early access before public launch</li>
+                <li>🎁 Lifetime access to the tool</li>
+                <li>💰 Bonus feedback credits</li>
+                <li>🎬 Exclusive behind-the-scenes updates</li>
+              </ul>
+              <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin-top: 20px;">
+                We'll keep you posted on our progress. Stay tuned!
+              </p>
+              <p style="color: #4a4a4a; font-size: 16px; line-height: 1.6; margin-top: 30px;">
+                Best,<br>
+                <strong>The CourseFlow Team</strong>
+              </p>
+            </div>
+          `,
+        },
+      });
+
       setIsSuccess(true);
       toast({
         title: "You're on the list! 🎉",
-        description: "We'll notify you when CourseFlow launches.",
+        description: "Check your inbox for a welcome email.",
       });
     } catch (error) {
       console.error("Subscription error:", error);
