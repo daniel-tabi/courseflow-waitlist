@@ -143,7 +143,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send the predefined welcome email - no arbitrary content accepted
     const emailResponse = await resend.emails.send({
-      from: "CourseFlow <onboarding@resend.dev>",
+      from: "CourseFlow <hello@courseflow.online>",
       to: [sanitizedEmail],
       subject: WAITLIST_WELCOME_TEMPLATE.subject,
       html: WAITLIST_WELCOME_TEMPLATE.getHtml(sanitizedEmail),
