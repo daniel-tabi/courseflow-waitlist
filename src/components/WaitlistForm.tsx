@@ -39,6 +39,24 @@ export function WaitlistForm() {
     setIsLoading(true);
     
     try {
+      // Store email in database
+      const { error: dbError } = await supabase
+        .from("waitlist_emails")
+        .insert({ email: result.data.email });
+
+      if (dbError) {
+        // If duplicate email, still show success (they're already on the list)
+        if (dbError.code === "23505") {
+          setIsSuccess(true);
+          toast({
+            title: "You're already on the list!",
+            description: "We'll notify you when CourseFlow launches.",
+          });
+          return;
+        }
+        throw new Error(dbError.message || "Failed to join waitlist");
+      }
+
       // Send welcome email via Resend
       const { error } = await supabase.functions.invoke("send-email", {
         body: {
